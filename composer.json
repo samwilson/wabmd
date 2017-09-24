@@ -1,0 +1,10 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Samwilson\\WaBmdScraper\\": "src/"
+        }
+    },
+    "require": {
+        "rmccue/requests": "~1.6"
+    }
+}
