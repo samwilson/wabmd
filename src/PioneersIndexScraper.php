@@ -159,7 +159,11 @@ class PioneersIndexScraper {
             }
         }
         // Tell the user that something's going on.
-        echo join(', ', $rows[0]) . "\n";
+        if (isset($rows[0])) {
+            echo join(', ', $rows[0]) . "\n";
+        } else {
+            echo "No rows found.\n";
+        }
         return $rows;
     }
 
