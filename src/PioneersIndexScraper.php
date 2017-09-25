@@ -29,6 +29,10 @@ class PioneersIndexScraper {
     /** @var string */
     protected $searchType;
 
+    const BIRTHS = 1;
+    const DEATHS = 2;
+    const MARRIAGES = 3;
+
     public function __construct() {
         $headers = [
             'Referer' => $this->url,
@@ -38,35 +42,34 @@ class PioneersIndexScraper {
         $options = [
             'timeout' => 60,
         ];
-        $this->searchType = 'Birth';
+        $this->searchType = self::BIRTHS;
         $this->session = new Requests_Session();
         $this->session->headers = $headers;
         $this->session->options = $options;
     }
 
     /**
-     * Get a list of the BMD record types, keyed by their IDs.
-     * @return string[]
+     * Get a list of the BMD record types.
+     * @return string[] Type IDs, keyed by their title.
      */
     public function getAllowedTypes() {
         return [
-            1 => 'Birth',
-            2 => 'Death',
-            3 => 'Marriage',
+            'births' => self::BIRTHS,
+            'deaths' => self::DEATHS,
+            'marriages' => self::MARRIAGES,
         ];
     }
 
     /**
      * Initialise the search type and session.
-     * @param string $type One of 'birth', 'death', or 'marriage'.
+     * @param int $type One of the 'birth', 'death', or 'marriage' constants of this class.
      * @throws Exception
      */
     public function init($type) {
-        $typeName = ucfirst(strtolower($type));
-        if (!in_array($typeName, self::getAllowedTypes())) {
-            throw new Exception("'$type' is not an allowed record type.");
+        if (!in_array($type, $this->getAllowedTypes())) {
+            throw new Exception("'$type' is not an allowed search type.");
         }
-        $this->searchType = $typeName;
+        $this->searchType = $type;
         $this->currentRequest = $this->session->get($this->url);
     }
 
@@ -125,15 +128,15 @@ class PioneersIndexScraper {
 
         // Get the table headers into their own array.
         $headers = array();
-        $col_num = 0;
+        $colNum = 0;
         $headerThs = $xpath->query("//table[@id='MasterContent_pageContent_grvSearchResults'][1]/tr[@class='listHeader']/th");
         foreach ($headerThs as $th) {
             $val = trim($th->nodeValue, $whitespace);
             if (empty($val)) {
                 continue;
             }
-            $headers[$col_num] = $th->nodeValue;
-            $col_num++;
+            $headers[$colNum] = $th->nodeValue;
+            $colNum++;
         }
 
         // Get the table data.
@@ -143,22 +146,20 @@ class PioneersIndexScraper {
                 continue;
             }
             $row = array();
-            $col_num = 0;
+            $colNum = 0;
             foreach ($tr->getElementsByTagName('td') as $td) {
-                // Get headers (only applies to the first row)
                 $val = trim($td->nodeValue, $whitespace);
-                if (!isset($headers[$col_num])) {
-                    $headers[$col_num] = $val;
-                } elseif (!empty($headers[$col_num])) {
-                    $row[$headers[$col_num]] = $val;
+                if (isset($headers[$colNum])) {
+                    $row[$headers[$colNum]] = $val;
                 }
-                $col_num++;
+                $colNum++;
             }
             if (count($row) > 0) {
                 $rows[] = $row;
             }
         }
-        print_r($rows[0]);
+        // Tell the user that something's going on.
+        echo join(', ', $rows[0]) . "\n";
         return $rows;
     }
 
@@ -180,7 +181,7 @@ class PioneersIndexScraper {
             }
         }
         // Reset missing ones and remove extraneous ones.
-        $out[$this->fieldNamePrefix.'rblSearchType'] = array_search($this->searchType, $this->getAllowedTypes());
+        $out[$this->fieldNamePrefix.'rblSearchType'] = $this->searchType;
         unset($out['query']);
         unset($out['']);
         unset($out['search']);

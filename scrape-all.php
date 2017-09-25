@@ -12,10 +12,10 @@ if (!is_dir($dataDir)) {
 }
 
 // The main BMD loop.
-foreach ($pioneersIndex->getAllowedTypes() as $type) {
+foreach ($pioneersIndex->getAllowedTypes() as $typeName => $type) {
 
     $pioneersIndex->init($type);
-    $file = fopen(__DIR__ . "data/$type.csv", 'w');
+    $file = fopen("$dataDir/$typeName.csv", 'w');
 
     // First page
     $page1 = $pioneersIndex->getPage1();
