@@ -76,7 +76,7 @@ class CommandBase extends Command {
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
-		$this->dataDir = dirname( __DIR__, 2 ) . '/data';
+		$this->dataDir = dirname( __DIR__, 2 ) . '/public/data';
 		if ( !is_dir( $this->dataDir ) ) {
 			mkdir( $this->dataDir );
 		}
