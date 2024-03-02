@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>WA BMD</title>
+        <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+    </head>
+    <body>
+        <header class="px-4 py-5 my-5 text-center">
+            <h1 class="display-5 fw-bold">WA BMD</h1>
+            <p class="lead mb-4">
+                A tool to help track the citations of
+                the <a href="https://www.wa.gov.au/organisation/department-of-justice/online-index-search-tool">Western Australian Birth, Marriage, and Death index</a>
+                from <a href="https://www.wikidata.org">Wikidata</a>
+                and <a href="https://www.wikitree.com">WikiTree</a>.
+            </p>
+        </header>
+        <main>
+            {% block main %}{% endblock %}
+        </main>
+        <footer class="text-center mt-5">
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="">Issue tracker</a></li>
+                <li class="list-inline-item"><a href="">Source code</a></li>
+                <li class="list-inline-item"><a href="">GPL 3.0+</a></li>
+            </ul>
+        </footer>
+    </body>
+</html>

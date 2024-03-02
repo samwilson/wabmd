@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+
+env:
+  APP_ENV: test
+
+jobs:
+  build:
+
+    strategy:
+      matrix:
+        php: [ '8.2', '8.3' ]
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{matrix.php}}
+
+    - name: Install
+      run: composer install
+
+    - name: Test
+      run: composer test

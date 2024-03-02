@@ -1,0 +1,67 @@
+{% extends "base.html.twig" %}
+
+{% block main %}
+
+<div class="container">
+
+    <h1>{{record.registration_year}} {{type|title}} #{{record.registration_number}} ({{record.registration_district}})</h1>
+
+    <dl class="row">
+        <dt class="col-2">Name:</dt>
+        <dd class="col-10">{{record.given_names}} {{record.surname}}</dd>
+        <dt class="col-2">Parents:</dt>
+        <dd class="col-10">{{record.mother}}<br>{{record.father}}</dd>
+        <dt class="col-2">Birth details:</dt>
+        <dd class="col-10">{{record.birth_place}}, {{record.year_of_birth}}. {{record.gender}}</dd>
+        <dt class="col-2">Wikidata ID:</dt>
+        <dd class="col-10">
+            <form>
+                <label>None set; suggest one:</label>
+                <input type="text" />
+                <input type="submit" value="Go" />
+            </form>
+        </dd>
+        <dt class="col-2">WikiTree ID:</dt>
+        <dd class="col-10">
+            <form>
+                <label>None set; suggest one:</label>
+                <input type="text" />
+                <input type="submit" value="Go" />
+            </form>
+        </dd>
+    </dd>
+    </dl>
+
+    <h2>Citations</h2>
+
+    <h3>Plain</h3>
+    <p>
+        <a href="https://www.wa.gov.au/organisation/department-of-justice/online-index-search-tool">
+            Western Australian Registry of Births, Marriages, and Deaths
+        </a>
+        ({{type}} in {{record.registration_year}}).
+        Archive URL:
+        <a href="{{url('record', {type:type, year:record.registration_year, num:record.registration_number})}}">
+            {{url('record', {type:type, year:record.registration_year, num:record.registration_number})}}
+        </a>
+    </p>
+
+    <h3>Wiki template:</h3>
+<pre>
+{{'{'}}{WA BMD birth
+ | surname={{record.surname}}
+ | given_names={{record.given_names}}
+ | gender={{record.gender}}
+ | father={{record.father}}
+ | mother={{record.mother}}
+ | birth_place={{record.birth_place}}
+ | year_of_birth={{record.year_of_birth}}
+ | registration_district={{record.registration_district}}
+ | registration_year={{record.registration_year}}
+ | registration_number={{record.registration_number}}
+}{{'}'}}
+</pre>
+
+</div>
+
+{% endblock %}
