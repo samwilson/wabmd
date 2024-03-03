@@ -39,18 +39,18 @@ class ImportCommand extends CommandBase {
 				if ( $rowNum === 1 || !$row ) {
 					continue;
 				}
-				if ( count( $dataChunk ) <= 100 ) {
-					$rowData = array_combine( $info['fields'], $row );
-					$rowData['registration_district_id'] = $this->db->getDistrictId(
-						$rowData['registration_district_id']
-					);
-					$placeColName = $info['singular'] . '_place_id';
-					$rowData[$placeColName] = $this->db->getPlaceId( $rowData[$placeColName] );
-					$dataChunk[] = $rowData;
-					$progressBar->advance();
-				} else {
+				$rowData = array_combine( $info['fields'], $row );
+				$rowData['registration_district_id'] = $this->db->getDistrictId(
+					$rowData['registration_district_id']
+				);
+				$placeColName = $info['singular'] . '_place_id';
+				$rowData[$placeColName] = $this->db->getPlaceId( $rowData[$placeColName] );
+				$dataChunk[] = $rowData;
+				// Save every 100 records.
+				if ( count( $dataChunk ) === 100 ) {
 					$this->db->saveMultiple( $info['plural'], $dataChunk );
 					$dataChunk = [];
+					$progressBar->advance( 100 );
 				}
 			}
 			$io->newLine();

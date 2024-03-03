@@ -22,7 +22,8 @@ class Database {
 		}
 		$id = $this->conn->fetchOne( 'SELECT id FROM districts WHERE title = ?', [ $districtTitle ] );
 		if ( !$id ) {
-			$id = $this->conn->insert( 'districts', [ 'title' => $districtTitle ] );
+			$this->conn->insert( 'districts', [ 'title' => $districtTitle ] );
+			$id = $this->conn->lastInsertId();
 		}
 		$this->districts[$districtTitle] = $id;
 		return $id;
@@ -34,7 +35,8 @@ class Database {
 		}
 		$id = $this->conn->fetchOne( 'SELECT id FROM places WHERE title = ?', [ $placeTitle ] );
 		if ( !$id ) {
-			$id = $this->conn->insert( 'places', [ 'title' => $placeTitle ] );
+			$this->conn->insert( 'places', [ 'title' => $placeTitle ] );
+			$id = $this->conn->lastInsertId();
 		}
 		$this->places[$placeTitle] = $id;
 		return $id;
