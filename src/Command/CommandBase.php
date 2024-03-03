@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
 	name: 'app:download',
-	description: 'Download records from the WA BDM index into JSON and CSV files in the data/ directory.',
+	description: 'Download records from the WA BMD index into JSON and CSV files in the data/ directory.',
 )]
 class CommandBase extends Command {
 

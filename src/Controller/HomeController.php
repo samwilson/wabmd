@@ -18,20 +18,42 @@ class HomeController extends AbstractController {
 
 	#[Route( '/', name: 'home' )]
 	public function index( Request $request ): Response {
-		$results = $this->db->search( $request->get( 'surname' ) );
-
-		return $this->render( 'search.html.twig', [
+		if ( $request->get( 'type' ) ) {
+			return $this->redirectToRoute( 'record', [
+				'type' => $request->get( 'type' ),
+				'year' => $request->get( 'registration_year' ),
+				'num' => $request->get( 'registration_number' ),
+			] );
+		}
+		return $this->render( 'home.html.twig', [
 			'total_count' => $this->db->getTotalRecords(),
-			'results' => $results,
+			'year_totals' => $this->db->getYearTotals(),
+		] );
+	}
+
+	#[Route( '/{type}/{year}', name: 'year' )]
+	public function year( string $type, string $year ): Response {
+		$year = $this->db->getYear( $type, $year );
+		if ( !$year ) {
+			throw $this->createNotFoundException();
+		}
+		return $this->render( 'year.html.twig', [
+			'total_count' => $this->db->getTotalRecords(),
+			'type' => $type,
+			'year' => $year,
 		] );
 	}
 
 	#[Route( '/{type}/{year}/{num}', name: 'record' )]
 	public function record( string $type, string $year, string $num ): Response {
-		return $this->render( 'view.html.twig', [
+		$record = $this->db->getRecord( $type, $year, $num );
+		if ( !$record ) {
+			throw $this->createNotFoundException();
+		}
+		return $this->render( 'record.html.twig', [
 			'total_count' => $this->db->getTotalRecords(),
 			'type' => $type,
-			'record' => $this->db->getRecord( $type, $year, $num ),
+			'record' => $record,
 		] );
 	}
 }

@@ -37,13 +37,15 @@
     <h3>Plain</h3>
     <p>
         <a href="https://www.wa.gov.au/organisation/department-of-justice/online-index-search-tool">
-            Western Australian Registry of Births, Marriages, and Deaths
+            Western Australian Birth, Marriage, and Death index
         </a>
-        ({{type}} in {{record.registration_year}}).
-        Archive URL:
+        (Government of Western Australia, Department of Justice)
+        <em>Index entry for {{record.given_names}} {{record.surname}}</em>
+        ({{type|title}} registered in {{record.registration_year}}; number:&nbsp;{{record.registration_number}}; district:&nbsp;{{record.registration_district}}).
+        Accessed {{'now'|date('m F Y')}}.
+        Reference URL:
         <a href="{{url('record', {type:type, year:record.registration_year, num:record.registration_number})}}">
-            {{url('record', {type:type, year:record.registration_year, num:record.registration_number})}}
-        </a>
+            {{url('record', {type:type, year:record.registration_year, num:record.registration_number})}}</a>.
     </p>
 
     <h3>Wiki template:</h3>

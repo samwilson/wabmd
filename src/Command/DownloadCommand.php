@@ -11,7 +11,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsCommand(
 	name: 'app:download',
-	description: 'Download records from the WA BDM index into JSON and CSV files in the data/ directory.',
+	description: 'Download records from the WA BMD index into JSON and CSV files in the data/ directory.',
 )]
 class DownloadCommand extends CommandBase {
 
