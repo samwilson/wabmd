@@ -3,7 +3,38 @@
 {% block main %}
 
 <table class="table container">
-
+    <thead>
+        <tr>
+            <th>Registration year & number</th>
+            <th>Registration district</th>
+            <th>Surname</th>
+            <th>Given names</th>
+            <th>Gender</th>
+            <th>Mother</th>
+            <th>Father</th>
+            <th>Birth place</th>
+            <th>Year of birth</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for y, data in year %}
+            <tr>
+                <td>
+                    <a href="{{path('record',{type:type_singular, year:data.registration_year, num:data.registration_number})}}">
+                        {{data.registration_year}}/{{data.registration_number}}
+                    </a>
+                </td>
+                <td>{{data.registration_district}}</td>
+                <td>{{data.surname}}</td>
+                <td>{{data.given_names}}</td>
+                <td>{{data.gender}}</td>
+                <td>{{data.mother}}</td>
+                <td>{{data.father}}</td>
+                <td>{{data.birth_place}}</td>
+                <td>{{data.year_of_birth}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>
 
 {% endblock %}

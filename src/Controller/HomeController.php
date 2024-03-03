@@ -31,20 +31,25 @@ class HomeController extends AbstractController {
 		] );
 	}
 
-	#[Route( '/{type}/{year}', name: 'year' )]
+	#[Route( '/{type}/{year}', name: 'year',
+		requirements: [ 'type' => '(births|marriages|deaths)', 'year' => '\d{4}' ]
+	)]
 	public function year( string $type, string $year ): Response {
-		$year = $this->db->getYear( $type, $year );
+		$year = $this->db->getYearData( $type, $year );
 		if ( !$year ) {
 			throw $this->createNotFoundException();
 		}
 		return $this->render( 'year.html.twig', [
 			'total_count' => $this->db->getTotalRecords(),
 			'type' => $type,
+			'type_singular' => substr( $type, 0, -1 ),
 			'year' => $year,
 		] );
 	}
 
-	#[Route( '/{type}/{year}/{num}', name: 'record' )]
+	#[Route( '/{type}/{year}/{num}', name: 'record',
+		requirements: [ 'type' => '(birth|marriage|death)', 'year' => '\d{4}' ]
+	)]
 	public function record( string $type, string $year, string $num ): Response {
 		$record = $this->db->getRecord( $type, $year, $num );
 		if ( !$record ) {

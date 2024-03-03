@@ -29,14 +29,14 @@ class ImportCommand extends CommandBase {
 		foreach ( $this->types as $info ) {
 			$io->writeln( 'Importing ' . $info['plural'] );
 			$progressBar->start();
-			$file = fopen( $this->getDataDir(). '/' . $info['plural'] . '.csv', 'r' );
+			$file = fopen( $this->getDataDir() . '/' . $info['plural'] . '.csv', 'r' );
 			$rowNum = 0;
 			$dataChunk = [];
 			$row = true;
 			while ( $row !== false ) {
 				$row = fgetcsv( $file );
 				$rowNum++;
-				if ( $rowNum === 1 ) {
+				if ( $rowNum === 1 || !$row ) {
 					continue;
 				}
 				if ( count( $dataChunk ) <= 100 ) {

@@ -40,27 +40,40 @@ class Database {
 		return $id;
 	}
 
-	public function getRecord( string $type, string $year, string $num ) {
+	private function getTypeQueryBuilder( $type ) {
 		$queryBuilder = $this->conn->createQueryBuilder()
 			->select( '*' );
 		switch ( $type ) {
 			case 'birth':
-				$queryBuilder->from( 'births' )
+			case 'births':
+					$queryBuilder->from( 'births' )
 					->join( 'births', 'places', 'p', 'birth_place_id = p.id' )
 					->addSelect( 'p.title AS birth_place' )
 					->join( 'births', 'districts', 'd', 'registration_district_id = d.id' )
 					->addSelect( 'd.title AS registration_district' );
 				break;
-			case 'death':
-				$queryBuilder->from( 'deaths' );
-				break;
 			case 'marriage':
-				$queryBuilder->from( 'marriages' );
+			case 'marriages':
+					$queryBuilder->from( 'marriages' )
+					->join( 'marriages', 'places', 'p', 'marriage_place_id = p.id' )
+					->addSelect( 'p.title AS marriage_place' )
+					->join( 'marriages', 'districts', 'd', 'registration_district_id = d.id' )
+					->addSelect( 'd.title AS registration_district' );
 				break;
-			default:
-				return [];
+			case 'death':
+			case 'deaths':
+					$queryBuilder->from( 'deaths' )
+					->join( 'deaths', 'places', 'p', 'death_place_id = p.id' )
+					->addSelect( 'p.title AS death_place' )
+					->join( 'deaths', 'districts', 'd', 'registration_district_id = d.id' )
+					->addSelect( 'd.title AS registration_district' );
+				break;
 		}
-		return $queryBuilder
+		return $queryBuilder;
+	}
+
+	public function getRecord( string $type, string $year, string $num ) {
+		return $this->getTypeQueryBuilder( $type )
 			->where( 'registration_year = ?' )
 			->setParameter( 0, $year )
 			->andWhere( 'registration_number = ?' )
@@ -68,8 +81,18 @@ class Database {
 			->fetchAssociative();
 	}
 
-	public function getYear( $type, $year ) {
-		return [];
+	public function getYearData( $type, $year ) {
+		$qb = $this->getTypeQueryBuilder( $type );
+		if ( $type === 'births' ) {
+			$qb->where( 'year_of_birth = ?' );
+		} elseif ( $type === 'marriages' ) {
+			$qb->where( 'year_of_marriage = ?' );
+		} elseif ( $type === 'deaths' ) {
+			$qb->where( 'year_of_death = ?' );
+		}
+		return $qb->setParameter( 0, $year )
+			->orderBy( 'CAST( registration_number AS UNSIGNED )' )
+			->fetchAllAssociative();
 	}
 
 	public function getYearTotals() {
