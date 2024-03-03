@@ -35,8 +35,8 @@ class HomeController extends AbstractController {
 		requirements: [ 'type' => '(births|marriages|deaths)', 'year' => '\d{4}' ]
 	)]
 	public function year( string $type, string $year ): Response {
-		$year = $this->db->getYearData( $type, $year );
-		if ( !$year ) {
+		$yearData = $this->db->getYearData( $type, $year );
+		if ( !$yearData ) {
 			throw $this->createNotFoundException();
 		}
 		return $this->render( 'year.html.twig', [
@@ -44,6 +44,7 @@ class HomeController extends AbstractController {
 			'type' => $type,
 			'type_singular' => substr( $type, 0, -1 ),
 			'year' => $year,
+			'year_data' => $yearData,
 		] );
 	}
 
