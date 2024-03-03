@@ -73,25 +73,6 @@ class Database {
 	}
 
 	public function getRecord( string $type, string $year, string $num ) {
-		// $queryBuilder = $this->conn->createQueryBuilder()
-		// 	->select( '*' );
-		// switch ( $type ) {
-		// 	case 'birth':
-		// 		$queryBuilder->from( 'births' )
-		// 			->join( 'births', 'places', 'p', 'birth_place_id = p.id' )
-		// 			->addSelect( 'p.title AS birth_place' )
-		// 			->join( 'births', 'districts', 'd', 'registration_district_id = d.id' )
-		// 			->addSelect( 'd.title AS registration_district' );
-		// 		break;
-		// 	case 'death':
-		// 		$queryBuilder->from( 'deaths' );
-		// 		break;
-		// 	case 'marriage':
-		// 		$queryBuilder->from( 'marriages' );
-		// 		break;
-		// 	default:
-		// 		return [];
-		// }
 		return $this->getTypeQueryBuilder( $type )
 			->where( 'registration_year = ?' )
 			->setParameter( 0, $year )
