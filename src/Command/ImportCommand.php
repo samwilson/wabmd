@@ -23,12 +23,13 @@ class ImportCommand extends CommandBase {
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
+		parent::execute( $input, $output );
 		$io = new SymfonyStyle( $input, $output );
 		$progressBar = $io->createProgressBar();
 		foreach ( $this->types as $info ) {
 			$io->writeln( 'Importing ' . $info['plural'] );
 			$progressBar->start();
-			$file = fopen( dirname( __DIR__, 2 ) . '/data/' . $info['plural'] . '.csv', 'r' );
+			$file = fopen( $this->getDataDir(). '/' . $info['plural'] . '.csv', 'r' );
 			$rowNum = 0;
 			$dataChunk = [];
 			$row = true;
