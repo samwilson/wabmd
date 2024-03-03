@@ -47,13 +47,25 @@
         <tr>
             <td class="text-start">{{year}}</td>
             <td class="text-end">
-                {{data.births.total|number_format}}
+                {% if data.births.total %}
+                    <a href="{{path('year', {year:year, type:'births'})}}">
+                        {{data.births.total|number_format}}
+                    </a>
+                {% endif %}
             </td>
             <td class="text-end">
-                {{data.marriages.total|number_format}}
+                {% if data.marriages.total %}
+                    <a href="{{path('year', {year:year, type:'marriages'})}}">
+                        {{data.marriages.total|number_format}}
+                    </a>
+                {% endif %}
             </td>
             <td class="text-end">
-                {{data.deaths.total|number_format}}
+                {% if data.deaths.total %}
+                    <a href="{{path('year', {year:year, type:'deaths'})}}">
+                        {{data.deaths.total|number_format}}
+                    </a>
+                {% endif %}
             </td>
         </tr>
     {% endfor %}
