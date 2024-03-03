@@ -1,0 +1,62 @@
+{% extends "base.html.twig" %}
+
+{% block main %}
+
+<form class="container" action="{{path('home')}}" method="get">
+    <div class="mb-3">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="type" id="type_birth" value="birth" checked>
+            <label class="form-check-label" for="type_birth">Birth</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="type" id="type_marriage" value="marriage">
+            <label class="form-check-label" for="type_marriage">Marriage</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="type" id="type_death" value="death">
+            <label class="form-check-label" for="type_death">Death</label>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col">
+            <label for="registration_year" class="form-label">Registration year:</label>
+            <input type="text" class="form-control" name="registration_year" id="registration_year" required>
+        </div>
+        <div class="col">
+            <label for="registration_number" class="form-label">Registration number:</label>
+            <input type="text" class="form-control" name="registration_number" id="registration_number" required>
+        </div>
+    </div>
+    <p>
+        <button type="submit" class="btn btn-primary">
+            Go to record
+        </button>
+    </p>
+</form>
+
+<table class="table table-hover container">
+    <thead>
+        <tr>
+            <th class="text-start">Year</th>
+            <th class="text-end">Births</th>
+            <th class="text-end">Marriages</th>
+            <th class="text-end">Deaths</th>
+        </tr>
+    </thead>
+    {% for year,data in year_totals %}
+        <tr>
+            <td class="text-start">{{year}}</td>
+            <td class="text-end">
+                {{data.births.total|number_format}}
+            </td>
+            <td class="text-end">
+                {{data.marriages.total|number_format}}
+            </td>
+            <td class="text-end">
+                {{data.deaths.total|number_format}}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

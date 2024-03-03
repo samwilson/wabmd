@@ -68,6 +68,57 @@ class Database {
 			->fetchAssociative();
 	}
 
+	public function getYear( $type, $year ) {
+		return [];
+	}
+
+	public function getYearTotals() {
+		$births = $this->conn->executeQuery( '
+			SELECT year_of_birth AS year, COUNT(id) AS total
+				FROM births
+				GROUP BY year_of_birth
+				ORDER BY year_of_birth
+		' )->fetchAllAssociativeIndexed();
+		$marriages = $this->conn->executeQuery( '
+			SELECT year_of_marriage AS year, COUNT(id) AS total
+				FROM marriages
+				GROUP BY year_of_marriage
+				ORDER BY year_of_marriage
+		' )->fetchAllAssociativeIndexed();
+		$deaths = $this->conn->executeQuery( '
+			SELECT year_of_death AS year, COUNT(id) AS total
+				FROM deaths
+				GROUP BY year_of_death
+				ORDER BY year_of_death
+		' )->fetchAllAssociativeIndexed();
+		$years = array_filter( array_merge(
+			array_keys( $births ),
+			array_keys( $marriages ),
+			array_keys( $deaths )
+		), 'is_numeric' );
+		$out = [];
+		for ( $y = min( $years ); $y <= max( $years ); $y++ ) {
+			$out[ $y ] = [
+				'births' => [
+					'total' => $births[$y]['total'] ?? 0,
+					'wikidata' => 0,
+					'wikitree' => 0,
+				],
+				'marriages' => [
+					'total' => $marriages[$y]['total'] ?? 0,
+					'wikidata' => 0,
+					'wikitree' => 0,
+				],
+				'deaths' => [
+					'total' => $deaths[$y]['total'] ?? 0,
+					'wikidata' => 0,
+					'wikitree' => 0,
+				],
+			];
+		}
+		return $out;
+	}
+
 	public function getTotalRecords() {
 		return $this->conn->fetchOne( 'SELECT SUM(t) FROM (
 			SELECT COUNT(*) AS t FROM births
