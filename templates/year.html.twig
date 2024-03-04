@@ -29,6 +29,7 @@
                     <th>Father</th>
                     <th>Death place</th>
                 {% endif %}
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -60,6 +61,33 @@
                         <td>{{data.father}}</td>
                         <td>{{data.death_place}}</td>
                     {% endif %}
+                    <td>
+                        <form action="https://www.wikitree.com/wiki/Special:SearchPerson" method="post" target="_blank">
+                            <input type="hidden" name="wpSearch" value="1" />
+                            <input type="hidden" name="wpFirst" value="{{data.given_names}}" />
+                            <input type="hidden" name="wpLast" value="{{data.surname}}" />
+                            {% if type == 'births' %}
+                                <input type="hidden" name="wpBirthDate" value="{{year}}" />
+                                <input type="hidden" name="birth_location" value="{{data.birth_place}}" />
+                            {% endif %}
+                            {% if type == 'deaths' %}
+                                <input type="hidden" name="wpDeathDate" value="{{year}}" />
+                                <input type="hidden" name="death_location" value="{{data.death_place}}" />
+                            {% endif %}
+                            {#
+                            <input type="hidden" name="father_first_name" value="" />
+                            <input type="hidden" name="father_last_name" value="" />
+                            <input type="hidden" name="mother_first_name" value="" />
+                            <input type="hidden" name="mother_last_name" value="" />
+                            <input type="hidden" name="date_spread" value="2" />
+                            <input type="hidden" name="date_include" value="neither" />
+                            <input type="hidden" name="last_name_match" value="all" />
+                            <input type="hidden" name="skip_variants" value="0" />
+                            <input type="hidden" name="watchlist" value="any" />
+                            #}
+                            <input type="submit" value="Search WikiTree" />
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
