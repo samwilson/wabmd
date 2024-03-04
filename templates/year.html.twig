@@ -9,14 +9,26 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Registration year & number</th>
+                <th>Registration year &amp;&nbsp;number</th>
                 <th>Registration district</th>
                 <th>Surname</th>
                 <th>Given names</th>
                 <th>Gender</th>
-                <th>Mother</th>
-                <th>Father</th>
-                <th>Birth place</th>
+                {% if type == 'births' %}
+                    <th>Mother</th>
+                    <th>Father</th>
+                    <th>Birth place</th>
+                {% elseif type == 'marriages' %}
+                    <th>Spouse surname</th>
+                    <th>Spouse given names</th>
+                    <th>Spouse gender</th>
+                    <th>Marriage place</th>
+                {% elseif type == 'deaths' %}
+                    <th>Gender</th>
+                    <th>Age</th>
+                    <th>Father</th>
+                    <th>Death place</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -30,10 +42,24 @@
                     <td>{{data.registration_district}}</td>
                     <td>{{data.surname}}</td>
                     <td>{{data.given_names}}</td>
-                    <td>{{data.gender}}</td>
-                    <td>{{data.mother}}</td>
-                    <td>{{data.father}}</td>
-                    <td>{{data.birth_place}}</td>
+                    {% if type == 'births' %}
+                        <td>{{data.gender}}</td>
+                        <td>{{data.mother}}</td>
+                        <td>{{data.father}}</td>
+                        <td>{{data.birth_place}}</td>
+                    {% elseif type == 'marriages' %}
+                        <td>{{data.gender1}}</td>
+                        <td>{{data.spouse_surname}}</td>
+                        <td>{{data.spouse_given_names}}</td>
+                        <td>{{data.gender2}}</td>
+                        <td>{{data.marriage_place}}</td>
+                    {% elseif type == 'deaths' %}
+                        <td>{{data.gender}}</td>
+                        <td>{{data.age}}</td>
+                        <td>{{data.mother}}</td>
+                        <td>{{data.father}}</td>
+                        <td>{{data.death_place}}</td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>
