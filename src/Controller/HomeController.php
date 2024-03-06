@@ -47,19 +47,4 @@ class HomeController extends AbstractController {
 			'year_data' => $yearData,
 		] );
 	}
-
-	#[Route( '/{type}/{year}/{num}', name: 'record',
-		requirements: [ 'type' => '(birth|marriage|death)', 'year' => '\d{4}' ]
-	)]
-	public function record( string $type, string $year, string $num ): Response {
-		$record = $this->db->getRecord( $type, $year, $num );
-		if ( !$record ) {
-			throw $this->createNotFoundException();
-		}
-		return $this->render( 'record.html.twig', [
-			'total_count' => $this->db->getTotalRecords(),
-			'type' => $type,
-			'record' => $record,
-		] );
-	}
 }

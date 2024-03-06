@@ -43,12 +43,12 @@ class Database {
 	}
 
 	private function getTypeQueryBuilder( $type ) {
-		$queryBuilder = $this->conn->createQueryBuilder()
-			->select( '*' );
+		$queryBuilder = $this->conn->createQueryBuilder();
 		switch ( $type ) {
 			case 'birth':
 			case 'births':
 					$queryBuilder->from( 'births' )
+					->select( 'births.*' )
 					->join( 'births', 'places', 'p', 'birth_place_id = p.id' )
 					->addSelect( 'p.title AS birth_place' )
 					->join( 'births', 'districts', 'd', 'registration_district_id = d.id' )
@@ -57,6 +57,7 @@ class Database {
 			case 'marriage':
 			case 'marriages':
 					$queryBuilder->from( 'marriages' )
+					->select( 'marriages.*' )
 					->join( 'marriages', 'places', 'p', 'marriage_place_id = p.id' )
 					->addSelect( 'p.title AS marriage_place' )
 					->join( 'marriages', 'districts', 'd', 'registration_district_id = d.id' )
@@ -65,6 +66,7 @@ class Database {
 			case 'death':
 			case 'deaths':
 					$queryBuilder->from( 'deaths' )
+					->select( 'deaths.*' )
 					->join( 'deaths', 'places', 'p', 'death_place_id = p.id' )
 					->addSelect( 'p.title AS death_place' )
 					->join( 'deaths', 'districts', 'd', 'registration_district_id = d.id' )
@@ -152,6 +154,20 @@ class Database {
 			UNION
 			SELECT COUNT(*) AS t FROM marriages
 		) AS d;' );
+	}
+
+	public function saveRecordWikidata( string $table, int $id, string $wikidata ) {
+		$this->conn->executeStatement(
+			"UPDATE $table SET wikidata=? WHERE id=?",
+			[ $wikidata, $id ]
+		);
+	}
+
+	public function saveRecordWikiTree( string $table, int $id, string $wikitree ) {
+		$this->conn->executeStatement(
+			"UPDATE $table SET wikitree=? WHERE id=?",
+			[ $wikitree, $id ]
+		);
 	}
 
 	public function saveMultiple( $table, $data ) {
