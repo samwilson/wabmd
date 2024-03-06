@@ -146,6 +146,26 @@ class Database {
 		return $out;
 	}
 
+	public function getTotalWikidata() {
+		return $this->conn->fetchOne( 'SELECT SUM(t) FROM (
+			SELECT COUNT(*) AS t FROM births WHERE wikidata IS NOT NULL
+			UNION
+			SELECT COUNT(*) AS t FROM deaths WHERE wikidata IS NOT NULL
+			UNION
+			SELECT COUNT(*) AS t FROM marriages WHERE wikidata IS NOT NULL
+		) AS d;' );
+	}
+
+	public function getTotalWikiTree() {
+		return $this->conn->fetchOne( 'SELECT SUM(t) FROM (
+			SELECT COUNT(*) AS t FROM births WHERE wikitree IS NOT NULL
+			UNION
+			SELECT COUNT(*) AS t FROM deaths WHERE wikitree IS NOT NULL
+			UNION
+			SELECT COUNT(*) AS t FROM marriages WHERE wikitree IS NOT NULL
+		) AS d;' );
+	}
+
 	public function getTotalRecords() {
 		return $this->conn->fetchOne( 'SELECT SUM(t) FROM (
 			SELECT COUNT(*) AS t FROM births

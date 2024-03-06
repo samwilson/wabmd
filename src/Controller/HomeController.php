@@ -27,6 +27,8 @@ class HomeController extends AbstractController {
 		}
 		return $this->render( 'home.html.twig', [
 			'total_count' => $this->db->getTotalRecords(),
+			'total_wikidata' => $this->db->getTotalWikidata(),
+			'total_wikitree' => $this->db->getTotalWikiTree(),
 			'year_totals' => $this->db->getYearTotals(),
 		] );
 	}
@@ -40,7 +42,6 @@ class HomeController extends AbstractController {
 			throw $this->createNotFoundException();
 		}
 		return $this->render( 'year.html.twig', [
-			'total_count' => $this->db->getTotalRecords(),
 			'type' => $type,
 			'type_singular' => substr( $type, 0, -1 ),
 			'year' => $year,

@@ -2,6 +2,16 @@
 
 {% block main %}
 
+<div class="container text-center mb-5 pb-5">
+<p>So far, {{total_wikidata|number_format}} records have been connected to Wikidata,
+and {{total_wikitree|number_format}} to WikiTree.</p>
+<p>You can help by adding references to peoples' profiles on either site,
+and then entering the relevant ID here.
+The data here is only available while we compare the sites and add more references,
+and all information should be checked against the actual BMD index.
+Do not treat the URLs of this tool as stable; they shouldn't be used in references.</p>
+</div>
+
 <form class="container" action="{{path('home')}}" method="get">
     <div class="mb-3">
         <div class="form-check form-check-inline">

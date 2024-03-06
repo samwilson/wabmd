@@ -32,6 +32,7 @@ class RecordController extends AbstractController {
 			'total_count' => $this->db->getTotalRecords(),
 			'type' => $type,
 			'record' => $record,
+			'quick_statements' => $this->getQuickStatements( $type, $record ),
 		] );
 	}
 
@@ -110,6 +111,26 @@ class RecordController extends AbstractController {
 		} else {
 			$this->addFlash( 'warning', "No suitable value and reference found on ID $wikidata." );
 		}
+	}
+
+	private function getQuickStatements( string $type, array $record ): string {
+		if ( $type === 'P569' ) {
+			$prop = 'P569';
+			$value = $record['year_of_birth'];
+		} elseif ( $type === 'death' ) {
+			$prop = 'P570';
+			$value = $record['year_of_death'];
+		} else {
+			return '';
+		}
+		$statedIn = 'S248';
+		$wabmdItem = 'Q42333722';
+		$pubDate = 'S577';
+		$regNum = 'S958';
+		return "Qnnn\t$prop\t+$value-00-00T00:00:00Z/9"
+			. "\t$statedIn\t$wabmdItem"
+			. "\t$pubDate\t+" . $record['registration_year'] . "-00-00T00:00:00Z/9"
+			. "\t$regNum\t\"" . $record['registration_number'] . "\"";
 	}
 
 	/**
