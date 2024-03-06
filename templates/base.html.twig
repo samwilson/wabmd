@@ -17,6 +17,20 @@
                 and <a href="https://www.wikitree.com">WikiTree</a>.
             </p>
         </header>
+
+        {% set flashes = app.flashes %}
+        {% if flashes %}
+            <div class="container">
+                {% for label, messages in flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{label}}" role="alert">
+                            {{message|raw}}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <main class="mb-5">
             {% block main %}{% endblock %}
         </main>

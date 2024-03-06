@@ -4,65 +4,173 @@
 
 <div class="container">
 
-    <h1>{{record.registration_year}} {{type|title}} #{{record.registration_number}} ({{record.registration_district}})</h1>
+    <h1>
+        <tt>
+            <a class="text-dark" title="View all {{type}}s for {{record.registration_year}}"
+                href="{{path('year',{year:record.registration_year, type:type~'s'})}}">WABMD-{{type}}-{{record.registration_year}}</a>/{{record.registration_number}}
+        </tt>
+    </h1>
 
     <dl class="row">
         <dt class="col-2">Name:</dt>
         <dd class="col-10">{{record.given_names}} {{record.surname}}</dd>
         <dt class="col-2">Parents:</dt>
         <dd class="col-10">{{record.mother}}<br>{{record.father}}</dd>
-        <dt class="col-2">Birth details:</dt>
-        <dd class="col-10">{{record.birth_place}}, {{record.year_of_birth}}. {{record.gender}}</dd>
-        <dt class="col-2">Wikidata ID:</dt>
-        <dd class="col-10">
-            <form>
-                <label>None set; suggest one:</label>
-                <input type="text" />
-                <input type="submit" value="Go" />
+        {% if type == 'birth' %}
+            <dt class="col-2">Birth details:</dt>
+            <dd class="col-10">{{record.birth_place}}, {{record.year_of_birth}}. Gender: {{record.gender}}</dd>
+        {% elseif type == 'death' %}
+            <dt class="col-2">Death details:</dt>
+            <dd class="col-10">{{record.death_place}}, {{record.year_of_death}}. Age: {{record.age}}</dd>
+        {% endif %}
+        <dt class="col-2">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Wikidata.svg/75px-Wikidata.svg.png" alt="Wikidata logo" />
+            Wikidata ID:
+        </dt>
+        <dd class="col-10 border mb-2 py-2">
+            {% if record.wikidata %}
+                <a href="https://www.wikidata.org/wiki/{{record.wikidata}}">{{record.wikidata}}</a>
+            {% endif %}
+            <form action="{{path('record_save', {type:type, year:record.registration_year, num:record.registration_number})}}" method="post">
+                <p>
+                    <label>
+                        {% if record.wikidata %}
+                            Switch to a different item:
+                        {% else %}
+                            No Wikidata ID set; suggest one now:
+                        {% endif %}
+                    </label>
+                    <input type="text" name="wikidata" placeholder="e.g. Q123" pattern="Q[0-9]+" />
+                    <input type="submit" value="Go" />
+                </p>
+            </form>
+            <form action="https://www.wikidata.org/w/index.php" method="get" target="_blank">
+                <p>
+                    Search Wikidata:
+                    <input type="hidden" name="search" value="{{record.given_names}} {{record.surname}}" />
+                    <input type="hidden" name="profile" value="advanced" />
+                    <input type="hidden" name="fulltext" value="1" />
+                    <input type="hidden" name="ns0" value="1" />
+                    <input type="submit" value="Search" title="Opens in a new tab" />
+                    &hellip;or <a href="https://www.wikidata.org/wiki/Special:NewItem?label={{record.given_names}} {{record.surname}}&description=person of Western Australia&lang=en"
+                        target="_blank" title="Opens in new tab">create a new item</a>
+                        (will prompt for details first)
+                </p>
             </form>
         </dd>
-        <dt class="col-2">WikiTree ID:</dt>
-        <dd class="col-10">
-            <form>
-                <label>None set; suggest one:</label>
-                <input type="text" />
-                <input type="submit" value="Go" />
+        <dt class="col-2">
+            <img src="https://www.wikitree.com/photo.php/thumb/d/d7/WikiTree_Images_New.png/75px-WikiTree_Images_New.png" alt="WikiTree logo" />
+            WikiTree ID:
+        </dt>
+        <dd class="col-10 border py-2">
+            {% if record.wikitree %}
+                <a href="https://www.wikitree.com/wiki/{{record.wikitree}}">{{record.wikitree}}</a>
+            {% endif %}
+            <form action="{{path('record_save', {type:type, year:record.registration_year, num:record.registration_number})}}" method="post">
+                <p>
+                    <label>
+                        {% if record.wikitree %}
+                            Switch to a different profile:
+                        {% else %}
+                            No WikiTree ID set; suggest one now:
+                        {% endif %}
+                    </label>
+                    <input type="text" name="wikitree" pattern="\D+-[1-9]\d*" placeholder="e.g. Smith-123" required />
+                    <input type="submit" value="Go" />
+                </p>
             </form>
+            <form action="https://www.wikitree.com/wiki/Special:SearchPerson" method="post" target="_blank">
+                <input type="hidden" name="wpSearch" value="1" />
+                <input type="hidden" name="wpFirst" value="{{record.given_names}}" />
+                <input type="hidden" name="wpLast" value="{{record.surname}}" />
+                {% if type == 'births' %}
+                    <input type="hidden" name="wpBirthDate" value="{{year}}" />
+                    <input type="hidden" name="birth_location" value="{{record.birth_place}}" />
+                {% endif %}
+                {% if type == 'deaths' %}
+                    <input type="hidden" name="wpDeathDate" value="{{year}}" />
+                    <input type="hidden" name="death_location" value="{{record.death_place}}" />
+                {% endif %}
+                {#
+                <input type="hidden" name="father_first_name" value="" />
+                <input type="hidden" name="father_last_name" value="" />
+                <input type="hidden" name="mother_first_name" value="" />
+                <input type="hidden" name="mother_last_name" value="" />
+                <input type="hidden" name="date_spread" value="2" />
+                <input type="hidden" name="date_include" value="neither" />
+                <input type="hidden" name="last_name_match" value="all" />
+                <input type="hidden" name="skip_variants" value="0" />
+                <input type="hidden" name="watchlist" value="any" />
+                #}
+                <p>
+                    Search WikiTree profiles (with preloaded search terms):
+                    <input type="submit" value="Search" title="Opens in a new tab" />
+                </p>
+            </form>
+            Or search WikiTree using Google (search for: <code>"WABMD-{{type}}-{{record.registration_year}}/{{record.registration_number}}"</code>):
+            <script async src="https://cse.google.com/cse.js?cx=partner-pub-5983849578006601:2801067696"></script>
+            <div class="gcse-search"></div>
+
         </dd>
     </dd>
     </dl>
 
     <h2>Citations</h2>
 
-    <h3>Plain</h3>
+    <h3>HTML</h3>
     <p>
+        <tt>WABMD-{{type}}-{{record.registration_year}}/{{record.registration_number}}</tt>.
         <a href="https://www.wa.gov.au/organisation/department-of-justice/online-index-search-tool">
             Western Australian Birth, Marriage, and Death index
         </a>
         (Government of Western Australia, Department of Justice)
         <em>Index entry for {{record.given_names}} {{record.surname}}</em>
         ({{type|title}} registered in {{record.registration_year}}; number:&nbsp;{{record.registration_number}}; district:&nbsp;{{record.registration_district}}).
-        Accessed {{'now'|date('m F Y')}}.
-        Reference URL:
-        <a href="{{url('record', {type:type, year:record.registration_year, num:record.registration_number})}}">
-            {{url('record', {type:type, year:record.registration_year, num:record.registration_number})}}</a>.
+        Accessed {{'now'|date('j F Y')}}.
     </p>
 
+    <h3>Wikitext</h3>
+<p><tt>
+&lt;ref>WABMD-{{type}}-{{record.registration_year}}/{{record.registration_number}}.
+[https://www.wa.gov.au/organisation/department-of-justice/online-index-search-tool Western Australian Birth, Marriage, and Death index]
+(Government of Western Australia, Department of Justice)
+''Index entry for {{record.given_names}} {{record.surname}}''
+({{type|title}} registered in {{record.registration_year}}; number: {{record.registration_number}}; district: {{record.registration_district}}).
+Accessed {{'now'|date('j F Y')}}.&lt;/ref>
+</tt></p>
+
     <h3>Wiki template:</h3>
-<pre>
+<pre><code>
 {{'{'}}{WA BMD birth
- | surname={{record.surname}}
- | given_names={{record.given_names}}
- | gender={{record.gender}}
- | father={{record.father}}
- | mother={{record.mother}}
- | birth_place={{record.birth_place}}
- | year_of_birth={{record.year_of_birth}}
- | registration_district={{record.registration_district}}
- | registration_year={{record.registration_year}}
- | registration_number={{record.registration_number}}
+ | surname = {{record.surname}}
+ | given_names = {{record.given_names}}
+ | gender = {{record.gender}}
+ | father = {{record.father}}
+ | mother = {{record.mother}}
+{% if type == 'birth' %}
+ | birth_place = {{record.birth_place}}
+ | year_of_birth = {{record.year_of_birth}}
+{% elseif type == 'death' %}
+ | death_place = {{record.death_place}}
+ | year_of_death = {{record.year_of_death}}
+ | age = {{record.age}}
+{% endif %}
+ | registration_district = {{record.registration_district}}
+ | registration_year = {{record.registration_year}}
+ | registration_number = {{record.registration_number}}
+ | access_date = {{'now'|date('Y-m-d')}}
 }{{'}'}}
-</pre>
+</code></pre>
+
+    <h3>Markdown</h3>
+<p><tt>
+WABMD-{{type|title}}-{{record.registration_year}}/{{record.registration_number}}.
+[Western Australian Birth, Marriage, and Death index](https://www.wa.gov.au/organisation/department-of-justice/online-index-search-tool)
+(Government of Western Australia, Department of Justice)
+*Index entry for {{record.given_names}} {{record.surname}}*
+({{type|title}} registered in {{record.registration_year}}; number: {{record.registration_number}}; district: {{record.registration_district}}).
+Accessed {{'now'|date('j F Y')}}.
+</tt></p>
 
 </div>
 
