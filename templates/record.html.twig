@@ -57,8 +57,6 @@
                         (will prompt for details first)
                 </p>
             </form>
-            <p><a href="https://quickstatements.toolforge.org" target="_blank">QuickStatements</a> to add a reference:</p>
-            <pre>{{quick_statements}}</pre>
         </dd>
         <dt class="col-2">
             <img src="https://www.wikitree.com/photo.php/thumb/d/d7/WikiTree_Images_New.png/75px-WikiTree_Images_New.png" alt="WikiTree logo" />
@@ -138,6 +136,12 @@
 (Government of Western Australia, Department of Justice)
 ''Index entry for {{record.given_names}} {{record.surname}}''
 ({{type|title}} registered in {{record.registration_year}}; number: {{record.registration_number}}; district: {{record.registration_district}}).
+Details: father: {{record.father}}; mother: {{record.mother}};
+{% if type == 'birth' %}
+birth place: {{record.birth_place}}; year of birth: {{record.year_of_birth}};
+{% elseif type == 'death' %}
+death place: {{record.death_place}}; year of death: {{record.year_of_death}}; age: {{record.age}}
+{% endif %}.
 Accessed {{'now'|date('j F Y')}}.&lt;/ref>
 </tt></p>
 
