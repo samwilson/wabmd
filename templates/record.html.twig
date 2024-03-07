@@ -130,24 +130,31 @@
     </p>
 
     <h3>Wikitext</h3>
-<p><tt>
-&lt;ref>WABMD-{{type}}-{{record.registration_year}}/{{record.registration_number}}.
+<p><tt>&lt;ref>WABMD-{{type}}-{{record.registration_year}}/{{record.registration_number}}.
 [https://www.wa.gov.au/organisation/department-of-justice/online-index-search-tool Western Australian Birth, Marriage, and Death index]
 (Government of Western Australia, Department of Justice)
 ''Index entry for {{record.given_names}} {{record.surname}}''
 ({{type|title}} registered in {{record.registration_year}}; number: {{record.registration_number}}; district: {{record.registration_district}}).
 Details: father: {{record.father}}; mother: {{record.mother}};
 {% if type == 'birth' %}
-birth place: {{record.birth_place}}; year of birth: {{record.year_of_birth}};
-{% elseif type == 'death' %}
-death place: {{record.death_place}}; year of death: {{record.year_of_death}}; age: {{record.age}}
-{% endif %}.
+birth place: {{record.birth_place}}; year of birth: {{record.year_of_birth}}{#
+#}{% elseif type == 'death' %}
+death place: {{record.death_place}}; year of death: {{record.year_of_death}}; age: {{record.age}}{#
+#}{% endif %}.
 Accessed {{'now'|date('j F Y')}}.&lt;/ref>
 </tt></p>
 
+    <h3>English Wikipedia template:</h3>
+<p><tt>{#
+#}{{'{'}}{CiteQ |Q42333722{#
+#} |year={{record.registration_year}} |title={{type|title}} index entry for {{record.given_names}} {{record.surname}}{#
+#} |id={{record.registration_number}} |access-date={{'now'|date('Y-m-d')}}{#
+#}}{{'}'}}
+</tt></p>
+
     <h3>Wiki template:</h3>
-<pre><code>
-{{'{'}}{WA BMD birth
+<p><tt>{#
+#}{{'{'}}{WA BMD birth
  | surname = {{record.surname}}
  | given_names = {{record.given_names}}
  | gender = {{record.gender}}
@@ -166,11 +173,11 @@ Accessed {{'now'|date('j F Y')}}.&lt;/ref>
  | registration_number = {{record.registration_number}}
  | access_date = {{'now'|date('Y-m-d')}}
 }{{'}'}}
-</code></pre>
+</tt></p>
 
     <h3>Markdown</h3>
-<p><tt>
-WABMD-{{type|title}}-{{record.registration_year}}/{{record.registration_number}}.
+<p><tt>{#
+#}WABMD-{{type|title}}-{{record.registration_year}}/{{record.registration_number}}.
 [Western Australian Birth, Marriage, and Death index](https://www.wa.gov.au/organisation/department-of-justice/online-index-search-tool)
 (Government of Western Australia, Department of Justice)
 *Index entry for {{record.given_names}} {{record.surname}}*
