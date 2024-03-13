@@ -29,7 +29,6 @@ class RecordController extends AbstractController {
 			throw $this->createNotFoundException();
 		}
 		return $this->render( 'record.html.twig', [
-			'total_count' => $this->db->getTotalRecords(),
 			'type' => $type,
 			'record' => $record,
 		] );
