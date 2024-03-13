@@ -1,5 +1,9 @@
 {% extends "base.html.twig" %}
 
+{% block headtitle %}
+    WABMD-{{type}}-{{year}}
+{% endblock %}
+
 {% block main %}
 
 <div class="container">
@@ -37,9 +41,14 @@
             {% for y, data in year_data %}
                 <tr>
                     <td>
-                        <a href="{{path('record',{type:type_singular, year:data.registration_year, num:data.registration_number})}}">
+                        {# @FIXME Don't link marriages for now as they don't dispaly correctly yet. #}
+                        {% if type != 'marriages' %}
+                            <a href="{{path('record',{type:type_singular, year:data.registration_year, num:data.registration_number})}}">
+                                {{data.registration_year}}/{{data.registration_number}}
+                            </a>
+                        {% else %}
                             {{data.registration_year}}/{{data.registration_number}}
-                        </a>
+                        {% endif %}
                     </td>
                     <td>{{data.registration_district}}</td>
                     <td>{{data.surname}}</td>

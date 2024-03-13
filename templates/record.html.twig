@@ -1,5 +1,9 @@
 {% extends "base.html.twig" %}
 
+{% block headtitle %}
+WABMD-{{type}}-{{record.registration_year}}/{{record.registration_number}}
+{% endblock %}
+
 {% block main %}
 
 <div class="container">
@@ -14,8 +18,13 @@
     <dl class="row">
         <dt class="col-2">Name:</dt>
         <dd class="col-10">{{record.given_names}} {{record.surname}}</dd>
-        <dt class="col-2">Parents:</dt>
-        <dd class="col-10">{{record.mother}}<br>{{record.father}}</dd>
+        {% if type == 'marriage' %}
+            <dt class="col-2">Spouse:</dt>
+            <dd class="col-10">{{record.spouse_given_names}}<br>{{record.spouse_surname}}</dd>
+        {% else %}
+            <dt class="col-2">Parents:</dt>
+            <dd class="col-10">{{record.mother}}<br>{{record.father}}</dd>
+        {% endif %}
         {% if type == 'birth' %}
             <dt class="col-2">Birth details:</dt>
             <dd class="col-10">{{record.birth_place}}, {{record.year_of_birth}}. Gender: {{record.gender}}</dd>
@@ -146,15 +155,15 @@ Accessed {{'now'|date('j F Y')}}.&lt;/ref>
 
     <h3>English Wikipedia template:</h3>
 <p><tt>{#
-#}{{'{'}}{CiteQ |Q42333722{#
+#}&lt;ref>{{'{'}}{CiteQ |Q42333722{#
 #} |year={{record.registration_year}} |title={{type|title}} index entry for {{record.given_names}} {{record.surname}}{#
 #} |id={{record.registration_number}} |access-date={{'now'|date('Y-m-d')}}{#
-#}}{{'}'}}
+#}}{{'}'}}&lt;/ref>
 </tt></p>
 
     <h3>Wiki template:</h3>
 <p><tt>{#
-#}{{'{'}}{WA BMD birth
+#}&lt;ref>{{'{'}}{WA BMD birth
  | surname = {{record.surname}}
  | given_names = {{record.given_names}}
  | gender = {{record.gender}}
@@ -172,8 +181,7 @@ Accessed {{'now'|date('j F Y')}}.&lt;/ref>
  | registration_year = {{record.registration_year}}
  | registration_number = {{record.registration_number}}
  | access_date = {{'now'|date('Y-m-d')}}
-}{{'}'}}
-</tt></p>
+}{{'}'}}&lt;ref></tt></p>
 
     <h3>Markdown</h3>
 <p><tt>{#
