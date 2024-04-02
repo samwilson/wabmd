@@ -49,7 +49,7 @@ WABMD-{{type}}-{{record.registration_year}}/{{record.registration_number}}
                             No Wikidata ID set; suggest one now:
                         {% endif %}
                     </label>
-                    <input type="text" name="wikidata" placeholder="e.g. Q123" pattern="Q[0-9]+" />
+                    <input type="text" name="wikidata" placeholder="e.g. Q123" pattern="Q[0-9]+" required value="{{wikidata}}" />
                     <input type="submit" value="Go" />
                 </p>
             </form>
@@ -84,7 +84,7 @@ WABMD-{{type}}-{{record.registration_year}}/{{record.registration_number}}
                             No WikiTree ID set; suggest one now:
                         {% endif %}
                     </label>
-                    <input type="text" name="wikitree" pattern="\D+-[1-9]\d*" placeholder="e.g. Smith-123" required />
+                    <input type="text" name="wikitree" pattern="\D+-[1-9]\d*" placeholder="e.g. Smith-123" required value="{{wikitree}}" />
                     <input type="submit" value="Go" />
                 </p>
             </form>
