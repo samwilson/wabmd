@@ -23,7 +23,7 @@ class RecordController extends AbstractController {
 	#[Route( '/{type}/{year}/{num}', name: 'record',
 		requirements: [ 'type' => '(birth|marriage|death)', 'year' => '\d{4}', 'num' => '\d+' ]
 	)]
-	public function record( string $type, string $year, string $num ): Response {
+	public function record( string $type, string $year, string $num, Request $request ): Response {
 		$record = $this->db->getRecord( $type, $year, $num );
 		if ( !$record ) {
 			throw $this->createNotFoundException();
@@ -31,6 +31,8 @@ class RecordController extends AbstractController {
 		return $this->render( 'record.html.twig', [
 			'type' => $type,
 			'record' => $record,
+			'wikidata' => $request->get( 'wikidata' ),
+			'wikitree' => $request->get( 'wikitree' ),
 		] );
 	}
 
@@ -42,15 +44,18 @@ class RecordController extends AbstractController {
 		if ( !$record ) {
 			throw $this->createNotFoundException();
 		}
+		$params = [ 'type' => $type, 'year' => $year, 'num' => $num ];
 		$wikidata = $request->get( 'wikidata' );
 		if ( $wikidata ) {
+			$params['wikidata'] = $wikidata;
 			$this->saveWikidata( $record, $type, $wikidata );
 		}
 		$wikitree = $request->get( 'wikitree' );
 		if ( $wikitree ) {
+			$params['wikitree'] = $wikitree;
 			$this->saveWikiTree( $record, $type, $wikitree );
 		}
-		return $this->redirectToRoute( 'record', [ 'type' => $type, 'year' => $year, 'num' => $num ] );
+		return $this->redirectToRoute( 'record', $params );
 	}
 
 	private function saveWikiTree( array $record, string $type, string $wikiTree ) {
