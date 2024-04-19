@@ -52,6 +52,10 @@ class HomeController extends AbstractController {
 	#[Route( '/places', name: 'places' )]
 	public function places( Request $request ): Response {
 		$q = trim( $request->get( 'q' ) );
+		if ( strlen( $q ) < 3 ) {
+			$this->addFlash( 'warning', 'Please search place names by using at least three letters.' );
+			return $this->redirectToRoute( 'home' );
+		}
 		$birthPlaces = $this->db->searchPlaces( 'births', $q );
 		$data = [];
 		foreach ( $birthPlaces as $place ) {
