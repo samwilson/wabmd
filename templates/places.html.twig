@@ -1,0 +1,44 @@
+{% extends "base.html.twig" %}
+
+{% block headtitle %}
+    Places: '{{q}}'
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+
+    <form action="{{path('places')}}" method="get">
+        <p>
+            <label for="place-q" class="form-label">Place name:</label>
+            <input type="text" class="form-control" name="q" id="place-q" required value="{{q}}" />
+        </p>
+        <p>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </p>
+    </form>
+
+    <legend>
+        {{data|length|format_number}} places found matching <code>{{q}}</code>.
+    </legend>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Place</th>
+                <th>Births</th>
+                <th>Deaths</th>
+            </tr>
+        </thead>
+        {% for d in data %}
+            <tr>
+                <td>{{d.title}}</th>
+                <td>{{d.births}}</td>
+                <td>{{d.deaths}}</td>
+            </tr>
+        {% endfor %}
+    <table>
+
+</div>
+
+{% endblock %}

@@ -208,4 +208,18 @@ class Database {
 		$this->conn->executeStatement( $sql, $values );
 	}
 
+	public function searchPlaces( string $type, string $searchTerm ): array {
+		$table = 'births';
+		$joinCol = 'birth_place_id';
+		if ( $type === 'deaths' ) {
+			$table = 'deaths';
+			$joinCol = 'death_place_id';
+		}
+		$sql = "SELECT p.id, p.title, COUNT(j.id) AS count
+		FROM places p
+			JOIN $table j ON ( p.id = j.$joinCol )
+		WHERE p.title LIKE ?
+		GROUP BY p.id";
+		return $this->conn->fetchAllAssociative( $sql, [ "%$searchTerm%" ] );
+	}
 }

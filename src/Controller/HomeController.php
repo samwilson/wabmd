@@ -48,4 +48,35 @@ class HomeController extends AbstractController {
 			'year_data' => $yearData,
 		] );
 	}
+
+	#[Route( '/places', name: 'places' )]
+	public function places( Request $request ): Response {
+		$q = trim( $request->get( 'q' ) );
+		$birthPlaces = $this->db->searchPlaces( 'births', $q );
+		$data = [];
+		foreach ( $birthPlaces as $place ) {
+			$data[$place['id']] = [
+				'id' => $place['id'],
+				'title' => $place['title'],
+				'births' => $place['count'],
+				'deaths' => 0,
+			];
+		}
+		$deathPlaces = $this->db->searchPlaces( 'deaths', $q );
+		foreach ( $deathPlaces as $place ) {
+			if ( !isset( $data[ $place['id'] ] ) ) {
+				$data[$place['id']] = [
+					'id' => $place['id'],
+					'title' => $place['title'],
+					'births' => 0,
+				];
+			}
+			$data[$place['id']]['deaths'] = $place['count'];
+		}
+		return $this->render( 'places.html.twig', [
+			'q' => $q,
+			'data' => $data
+		] );
+	}
+
 }
