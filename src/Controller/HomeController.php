@@ -37,15 +37,15 @@ class HomeController extends AbstractController {
 		requirements: [ 'type' => '(births|marriages|deaths)', 'year' => '\d{4}' ]
 	)]
 	public function year( string $type, string $year ): Response {
-		$yearData = $this->db->getYearData( $type, $year );
-		if ( !$yearData ) {
+		$data = $this->db->getYearData( $type, $year );
+		if ( !$data ) {
 			throw $this->createNotFoundException();
 		}
-		return $this->render( 'year.html.twig', [
+		return $this->render( 'records.html.twig', [
 			'type' => $type,
 			'type_singular' => substr( $type, 0, -1 ),
-			'year' => $year,
-			'year_data' => $yearData,
+			'title' => $year,
+			'data' => $data,
 		] );
 	}
 
@@ -83,4 +83,17 @@ class HomeController extends AbstractController {
 		] );
 	}
 
+	#[Route( '/places/{placeId}/{type}', name: 'place_records',
+		requirements: [ 'type' => '(births|marriages|deaths)', 'placeId' => '\d+' ]
+	)]
+	public function placeRecords( Request $request, int $placeId, string $type ): Response {
+		$title = $this->db->getPlaceTitle( $placeId );
+		$data = $this->db->getPlaceData( $type, $placeId );
+		return $this->render( 'records.html.twig', [
+			'type' => $type,
+			'type_singular' => substr( $type, 0, -1 ),
+			'title' => $title,
+			'data' => $data,
+		] );
+	}
 }

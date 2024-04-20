@@ -99,6 +99,23 @@ class Database {
 			->fetchAllAssociative();
 	}
 
+	public function getPlaceData( string $type, int $placeId ) {
+		$qb = $this->getTypeQueryBuilder( $type );
+		if ( $type === 'births' ) {
+			$qb->where( 'birth_place_id = ?' );
+		} elseif ( $type === 'marriages' ) {
+			$qb->where( 'marriage_place_id = ?' );
+		} elseif ( $type === 'deaths' ) {
+			$qb->where( 'death_place_id = ?' );
+		}
+		return $qb->setParameter( 0, $placeId )
+			->fetchAllAssociative();
+	}
+
+	public function getPlaceTitle( int $id ): string {
+		return $this->conn->fetchOne( 'SELECT title FROM places WHERE id = ?', [ $id ] );
+	}
+
 	public function getYearTotals() {
 		$births = $this->conn->executeQuery( '
 			SELECT year_of_birth AS year, COUNT(id) AS total
