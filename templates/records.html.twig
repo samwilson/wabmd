@@ -1,14 +1,14 @@
 {% extends "base.html.twig" %}
 
 {% block headtitle %}
-    WABMD-{{type}}-{{year}}
+    WABMD {{type|title}} in: {{title}}
 {% endblock %}
 
 {% block main %}
 
 <div class="container">
 
-    <h1>{{type|title}} in {{year}}</h1>
+    <h1>{{type|title}} in: <em>{{title}}</em></h1>
 
     <table class="table table-hover">
         <thead>
@@ -38,7 +38,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for y, data in year_data %}
+            {% for y, data in data %}
                 <tr>
                     <td>
                         {# @FIXME Don't link marriages for now as they don't dispaly correctly yet. #}

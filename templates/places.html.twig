@@ -33,8 +33,16 @@
         {% for d in data %}
             <tr>
                 <td>{{d.title}}</th>
-                <td>{{d.births}}</td>
-                <td>{{d.deaths}}</td>
+                <td>
+                    <a href="{{ path('place_records', {type:'births', placeId:d.id}) }}">
+                        {{d.births}}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('place_records', {type:'deaths', placeId:d.id}) }}">
+                        {{d.deaths}}
+                    </a>
+                </td>
             </tr>
         {% endfor %}
     <table>
