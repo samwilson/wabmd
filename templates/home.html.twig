@@ -12,8 +12,31 @@ and all information should be checked against the actual BMD index.
 Do not treat the URLs of this tool as stable; they shouldn't be used in references.</p>
 </div>
 
-<form class="container border border-dark pt-3" action="{{path('home')}}" method="get">
-    <p><strong>Search for a single record</strong></p>
+<div class="container pt-3 mt-3">
+    <div class="row">
+        <div class="col-md mb-3 px-0 pe-md-3">
+            <form action="{{path('places')}}" method="get" class="border border-dark p-2">
+                <p>
+                    <label for="person-q" class="form-label fw-bold">Search by a person's name (or part thereof):</label>
+                    <input type="text" class="form-control" name="q" id="person-q" required>
+                </p>
+                <p><button type="submit" class="btn btn-primary">Search for places</button></p>
+            </form>
+        </div>
+        <div class="col-md mb-3 px-0">
+            <form action="{{path('places')}}" method="get" class="border border-dark p-2 ">
+                <p>
+                    <label for="place-q" class="form-label fw-bold">Search by place name (or part thereof):</label>
+                    <input type="text" class="form-control" name="q" id="place-q" required>
+                </p>
+                <p><button type="submit" class="btn btn-primary">Search for people</button></p>
+            </form>
+        <div>
+    </div>
+</div>
+
+<form class="container border border-dark mb-3 pt-3" action="{{path('home')}}" method="get">
+    <p><strong>Search for a single record:</strong></p>
     <div class="mb-3">
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="type" id="type_birth" value="birth" checked>
@@ -42,17 +65,6 @@ Do not treat the URLs of this tool as stable; they shouldn't be used in referenc
         <button type="submit" class="btn btn-primary">
             Go to record
         </button>
-    </p>
-</form>
-
-<form class="container border border-dark pt-3 mt-3 mb-5" action="{{path('places')}}" method="get">
-    <p><strong>Search by place</strong></p>
-    <p>
-        <label for="place-q" class="form-label">Place name (or part thereof):</label>
-        <input type="text" class="form-control" name="q" id="place-q" required>
-    </p>
-    <p>
-        <button type="submit" class="btn btn-primary">Search</button>
     </p>
 </form>
 

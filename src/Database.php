@@ -239,4 +239,49 @@ class Database {
 		GROUP BY p.id";
 		return $this->conn->fetchAllAssociative( $sql, [ "%$searchTerm%" ] );
 	}
+
+	public function searchPeople( string $searchTerm ) {
+		$sql = "(
+			SELECT
+				'birth' AS type,
+				surname,
+				given_names,
+				gender,
+				father,
+				mother,
+				birth_place_id AS place_id,
+				year_of_birth AS year,
+				registration_district_id,
+				registration_year,
+				registration_number,
+				wikidata,
+				wikitree
+			FROM births WHERE
+				surname LIKE ?
+				OR given_names LIKE ?
+				OR father LIKE ?
+				OR mother LIKE ?
+			) UNION (
+			SELECT
+				'death' AS type,
+				surname,
+				given_names,
+				gender,
+				father,
+				mother,
+				death_place_id AS place_id,
+				year_of_death AS year,
+				registration_district_id,
+				registration_year,
+				registration_number,
+				wikidata,
+				wikitree
+			FROM deaths WHERE
+				surname LIKE ?
+				OR given_names LIKE ?
+				OR father LIKE ?
+				OR mother LIKE ?
+			) ORDER BY year ASC";
+		return $this->conn->fetchAllAssociative( $sql, array_fill( 0, 8, "%$searchTerm%" ) );
+	}
 }

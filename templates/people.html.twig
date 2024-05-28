@@ -1,0 +1,68 @@
+{% extends "base.html.twig" %}
+
+{% block headtitle %}
+    Places: '{{q}}'
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+
+    <form action="{{path('people')}}" method="get">
+        <p>
+            <label for="place-q" class="form-label">Person's name:</label>
+            <input type="text" class="form-control" name="q" id="place-q" required value="{{q}}" />
+        </p>
+        <p>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </p>
+    </form>
+
+    <legend>
+        {{data|length|format_number}} people found matching <code>{{q}}</code>.
+    </legend>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Record</th>
+                <th>Type</th>
+                <th>Year</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Mother</th>
+                <th>Father</th>
+                <th>Wikidata</th>
+                <th>WikiTree</th>
+            </tr>
+        </thead>
+        {% for d in data %}
+            <tr>
+                <td>
+                    <a href="{{ path('record', {type:d.type, year:d.registration_year, num:d.registration_number}) }}">
+                        WABMD-{{d.type|upper}}-{{d.registration_year}}/{{d.registration_number}}
+                    </a>
+                </td>
+                <td>{{d.type|title}}</td>
+                <td>{{d.year}}</td>
+                <td>{{d.given_names}} {{d.surname}}</td>
+                <td>{{d.gender}}</td>
+                <td>{{d.mother}}</td>
+                <td>{{d.father}}</td>
+                    <td>
+                    {% if d.wikidata %}
+                        <a href="https://www.wikidata.org/wiki/{{d.wikidata}}">{{d.wikidata}}</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if d.wikitree %}
+                        <a href="https://www.wikitree.com/wiki/{{d.wikitree}}">{{d.wikitree}}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    <table>
+
+</div>
+
+{% endblock %}
