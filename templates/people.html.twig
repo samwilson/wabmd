@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block headtitle %}
-    Places: '{{q}}'
+    People: '{{q}}'
 {% endblock %}
 
 {% block main %}
@@ -10,8 +10,8 @@
 
     <form action="{{path('people')}}" method="get">
         <p>
-            <label for="place-q" class="form-label">Person's name:</label>
-            <input type="text" class="form-control" name="q" id="place-q" required value="{{q}}" />
+            <label for="people-q" class="form-label">Person's name:</label>
+            <input type="text" class="form-control" name="q" id="people-q" required value="{{q}}" />
         </p>
         <p>
             <button type="submit" class="btn btn-primary">Search</button>

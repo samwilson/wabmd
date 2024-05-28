@@ -52,8 +52,8 @@ class HomeController extends AbstractController {
 	#[Route( '/people', name: 'people' )]
 	public function people( Request $request ): Response {
 		$q = trim( $request->get( 'q' ) );
-		if ( strlen( $q ) < 3 ) {
-			$this->addFlash( 'warning', "Please search people's names by using at least three letters." );
+		if ( strlen( $q ) < 5 ) {
+			$this->addFlash( 'warning', "Please search people's names by using at least five letters." );
 			return $this->redirectToRoute( 'home' );
 		}
 		return $this->render( 'people.html.twig', [
