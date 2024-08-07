@@ -249,14 +249,14 @@ class Database {
 				gender,
 				father,
 				mother,
-				birth_place_id AS place_id,
+				p.title AS place_title,
 				year_of_birth AS year,
 				registration_district_id,
 				registration_year,
 				registration_number,
 				wikidata,
 				wikitree
-			FROM births WHERE
+			FROM births JOIN places p ON ( p.id=birth_place_id ) WHERE
 				surname LIKE ?
 				OR given_names LIKE ?
 				OR father LIKE ?
@@ -269,14 +269,14 @@ class Database {
 				gender,
 				father,
 				mother,
-				death_place_id AS place_id,
+				p.title AS place_title,
 				year_of_death AS year,
 				registration_district_id,
 				registration_year,
 				registration_number,
 				wikidata,
 				wikitree
-			FROM deaths WHERE
+			FROM deaths JOIN places p ON ( p.id=death_place_id ) WHERE
 				surname LIKE ?
 				OR given_names LIKE ?
 				OR father LIKE ?
