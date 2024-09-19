@@ -138,9 +138,10 @@ WABMD-{{type}}-{{record.registration_year}}/{{record.registration_number}}
         Accessed {{'now'|date('j F Y')}}.
     </p>
 
+    {% set refname = 'name="WABMD-'~type~'-'~record.registration_year~'/'~record.registration_number~'"' %}
+
     <h3>Wikitext</h3>
-<p><tt>&lt;ref>WABMD-{{type}}-{{record.registration_year}}/{{record.registration_number}}.
-[https://www.wa.gov.au/organisation/department-of-justice/online-index-search-tool Registry of Births, Deaths and Marriages]
+<p><tt>&lt;ref {{refname}}>[https://www.wa.gov.au/organisation/department-of-justice/online-index-search-tool Registry of Births, Deaths and Marriages]
 (Government of Western Australia, Department of Justice)
 ''Index entry for {{record.given_names}} {{record.surname}}''
 ({{type|title}} registered in {{record.registration_year}}; number: {{record.registration_number}}; district: {{record.registration_district}}).
@@ -150,12 +151,11 @@ birth place: {{record.birth_place}}; year of birth: {{record.year_of_birth}}{#
 #}{% elseif type == 'death' %}
 death place: {{record.death_place}}; year of death: {{record.year_of_death}}; age: {{record.age}}{#
 #}{% endif %}.
-Accessed {{'now'|date('j F Y')}}.&lt;/ref>
-</tt></p>
+Accessed {{'now'|date('j F Y')}}. WABMD-{{type}}-{{record.registration_year}}/{{record.registration_number}}.&lt;/ref></tt></p>
 
     <h3>English Wikipedia template:</h3>
 <p><tt>{#
-#}&lt;ref>{{'{'}}{CiteQ |Q42333722{#
+#}&lt;ref {{refname}}>{{'{'}}{CiteQ |Q42333722{#
 #} |year={{record.registration_year}} |title={{type|title}} index entry for {{record.given_names}} {{record.surname}}{#
 #} |id={{record.registration_number}} |access-date={{'now'|date('Y-m-d')}}{#
 #}}{{'}'}}&lt;/ref>
