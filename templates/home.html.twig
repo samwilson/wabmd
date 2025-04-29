@@ -72,22 +72,29 @@ Do not treat the URLs of this tool as stable; they shouldn't be used in referenc
     <thead>
         <tr>
             <th class="text-start">Year</th>
-            <th class="text-end">Births</th>
-            <th class="text-end">Marriages</th>
+            <th class="text-end border-start">Births</th>
+            <th class="text-start">WikiTree %</th>
+            <th class="text-center border-start border-end">Marriages</th>
             <th class="text-end">Deaths</th>
+            <th class="text-start">WikiTree %</th>
         </tr>
     </thead>
     {% for year,data in year_totals %}
         <tr>
             <td class="text-start">{{year}}</td>
-            <td class="text-end">
+            <td class="text-end border-start">
                 {% if data.births.total %}
                     <a href="{{path('year', {year:year, type:'births'})}}">
-                        {{data.births.total|number_format}}
+                        {{-data.births.total|number_format-}}
                     </a>
                 {% endif %}
             </td>
-            <td class="text-end">
+            <td>
+                {% if data.births.total and data.births.wikitree %}
+                    {{(data.births.wikitree/data.births.total)|format_number({multiplier: 100}, 'percent')}}
+                {% endif %}
+            </td>
+            <td class="text-end border-start border-end">
                 {% if data.marriages.total %}
                     <a href="{{path('year', {year:year, type:'marriages'})}}">
                         {{data.marriages.total|number_format}}
@@ -99,6 +106,11 @@ Do not treat the URLs of this tool as stable; they shouldn't be used in referenc
                     <a href="{{path('year', {year:year, type:'deaths'})}}">
                         {{data.deaths.total|number_format}}
                     </a>
+                {% endif %}
+            </td>
+            <td>
+                {% if data.deaths.total and data.deaths.wikitree %}
+                    {{(data.deaths.wikitree/data.deaths.total)|format_number({multiplier: 100}, 'percent')}}
                 {% endif %}
             </td>
         </tr>
