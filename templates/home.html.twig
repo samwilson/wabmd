@@ -110,7 +110,7 @@ Do not treat the URLs of this tool as stable; they shouldn't be used in referenc
             </td>
             <td>
                 {% if data.deaths.total and data.deaths.wikitree %}
-                    {{(data.deaths.wikitree/data.deaths.total)|format_number({multiplier: 100}, 'percent')}}
+                    {{(data.deaths.wikitree/data.deaths.total)|format_number({multiplier: 100, rounding_mode:'up'}, 'percent')}}
                 {% endif %}
             </td>
         </tr>
