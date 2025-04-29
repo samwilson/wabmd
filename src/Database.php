@@ -118,7 +118,7 @@ class Database {
 
 	public function getYearTotals() {
 		$births = $this->conn->executeQuery( '
-			SELECT year_of_birth AS year, COUNT(id) AS total
+			SELECT year_of_birth AS year, COUNT(id) AS total, COUNT(wikitree) AS wikitree
 				FROM births
 				GROUP BY year_of_birth
 				ORDER BY year_of_birth
@@ -130,7 +130,7 @@ class Database {
 				ORDER BY year_of_marriage
 		' )->fetchAllAssociativeIndexed();
 		$deaths = $this->conn->executeQuery( '
-			SELECT year_of_death AS year, COUNT(id) AS total
+			SELECT year_of_death AS year, COUNT(id) AS total, COUNT(wikitree) AS wikitree
 				FROM deaths
 				GROUP BY year_of_death
 				ORDER BY year_of_death
@@ -145,18 +145,15 @@ class Database {
 			$out[ $y ] = [
 				'births' => [
 					'total' => $births[$y]['total'] ?? 0,
-					'wikidata' => 0,
-					'wikitree' => 0,
+					'wikitree' => $births[$y]['wikitree'] ?? 0,
 				],
 				'marriages' => [
 					'total' => $marriages[$y]['total'] ?? 0,
-					'wikidata' => 0,
 					'wikitree' => 0,
 				],
 				'deaths' => [
 					'total' => $deaths[$y]['total'] ?? 0,
-					'wikidata' => 0,
-					'wikitree' => 0,
+					'wikitree' => $deaths[$y]['wikitree'] ?? 0,
 				],
 			];
 		}
