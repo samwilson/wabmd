@@ -91,7 +91,7 @@ Do not treat the URLs of this tool as stable; they shouldn't be used in referenc
             </td>
             <td>
                 {% if data.births.total and data.births.wikitree %}
-                    {{(data.births.wikitree/data.births.total)|format_number({multiplier: 100}, 'percent')}}
+                    {{(data.births.wikitree/data.births.total)|format_number({multiplier: 100, rounding_mode:'up'}, 'percent')}}
                 {% endif %}
             </td>
             <td class="text-end border-start border-end">
