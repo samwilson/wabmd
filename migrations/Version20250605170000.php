@@ -14,7 +14,7 @@ final class Version20250605170000 extends AbstractMigration {
 	}
 
 	public function up( Schema $schema ): void {
-		$this->addSql( 'ALTER TABLE births ADD INDEX idx_yearofbirth_wikitree (year_of_birth, wikitree)');
-		$this->addSql( 'ALTER TABLE deaths ADD INDEX idx_yearofdeath_wikitree (year_of_death, wikitree)');
+		$this->addSql( 'ALTER TABLE births ADD INDEX idx_yearofbirth_wikitree (year_of_birth, wikitree)' );
+		$this->addSql( 'ALTER TABLE deaths ADD INDEX idx_yearofdeath_wikitree (year_of_death, wikitree)' );
 	}
 }
